@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "mini_tardis_portals",
+	"version": "${version}",
+	"name": "Mini Tardis: Portals",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"enjarai"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "",
+	"icon": "assets/mini_tardis_portals/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.enjarai.minitardisportals.MiniTardisPortals"
+		]
+	},
+	"mixins": [
+		"mini_tardis_portals.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.0",
+		"fabric-api": "*",
+		"mini_tardis": "*"
+	}
+}

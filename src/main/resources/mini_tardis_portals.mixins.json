@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "dev.enjarai.minitardisportals.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "DimensionIdRecordAccessor",
+    "InteriorDoorBlockMixin",
+    "PortalMixin",
+    "TardisAccessor",
+    "TardisExteriorBlockMixin",
+    "TardisExteriorExtensionBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
