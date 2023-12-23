@@ -79,7 +79,7 @@ public abstract class PortalMixin extends Entity implements TardisLinkedPortal {
             at = @At("HEAD")
     )
     private void removeIfTardisClosedOrGone(CallbackInfo ci) {
-        if (!getWorld().isClient()) {
+        if (!getWorld().isClient() && anchorPos != null && linkedTardis != null) {
             var anchorState = getWorld().getBlockState(anchorPos);
             if (getTardis().map(tardis -> !tardis.isDoorOpen()).orElse(false) ||
                     !(anchorState.isOf(ModBlocks.TARDIS_EXTERIOR) || anchorState.isOf(ModBlocks.INTERIOR_DOOR))) {
