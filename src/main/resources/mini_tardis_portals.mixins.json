@@ -5,6 +5,7 @@
   "mixins": [
     "DimensionIdRecordAccessor",
     "InteriorDoorBlockMixin",
+    "MiniTardisMixin",
     "PortalMixin",
     "TardisAccessor",
     "TardisExteriorBlockMixin",

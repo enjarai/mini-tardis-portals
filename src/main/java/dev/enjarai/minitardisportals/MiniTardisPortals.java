@@ -141,7 +141,7 @@ public class MiniTardisPortals implements ModInitializer {
 		exteriorPortal.setOrientationAndSize(
 				Vec3d.of(exteriorFacing.rotateClockwise(Direction.Axis.Y).getVector()),
 				new Vec3d(0, -1, 0),
-				1, 2
+				0.99, 2
 		);
 		exteriorPortal.setOtherSideOrientation(DQuaternion.fromFacingVecs(
 				Vec3d.of(interiorFacing.rotateClockwise(Direction.Axis.Y).getVector()),
