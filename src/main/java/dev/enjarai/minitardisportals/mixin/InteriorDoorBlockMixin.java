@@ -6,6 +6,7 @@ import dev.enjarai.minitardis.block.TardisExteriorBlockEntity;
 import dev.enjarai.minitardisportals.MiniTardisPortals;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.property.EnumProperty;
@@ -34,7 +35,7 @@ public abstract class InteriorDoorBlockMixin implements TardisAware {
         if (!world.isClient()) {
             getTardis(world).ifPresent(tardis ->
                     MiniTardisPortals.openDoorFromInterior(tardis, world,
-                            state.get(HALF) == DoubleBlockHalf.LOWER ? pos : pos.down(), state.get(FacingBlock.FACING)));
+                            state.get(HALF) == DoubleBlockHalf.LOWER ? pos : pos.down(), state.get(HorizontalFacingBlock.FACING)));
         }
 
         cir.setReturnValue(ActionResult.SUCCESS);

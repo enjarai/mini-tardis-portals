@@ -13,6 +13,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.block.FacingBlock;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
@@ -88,7 +89,7 @@ public class MiniTardisPortals implements ModInitializer {
 
 				do {
 					if (interiorDoorState.isOf(ModBlocks.INTERIOR_DOOR) && interiorDoorState.get(InteriorDoorBlock.HALF) == DoubleBlockHalf.LOWER) {
-						var facing = interiorDoorState.get(FacingBlock.FACING);
+						var facing = interiorDoorState.get(HorizontalFacingBlock.FACING);
 						((TardisAccessor) tardis).setInteriorDoorPosition(interiorDoorPos);
 
 						interiorDoorFacing = facing;
