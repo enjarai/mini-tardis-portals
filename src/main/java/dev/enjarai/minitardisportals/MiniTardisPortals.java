@@ -1,21 +1,17 @@
 package dev.enjarai.minitardisportals;
 
-import dev.enjarai.minitardis.MiniTardis;
 import dev.enjarai.minitardis.block.InteriorDoorBlock;
 import dev.enjarai.minitardis.block.ModBlocks;
 import dev.enjarai.minitardis.component.Tardis;
 import dev.enjarai.minitardisportals.duck.TardisLinkedPortal;
-import dev.enjarai.minitardisportals.mixin.DimensionIdRecordAccessor;
 import dev.enjarai.minitardisportals.mixin.TardisAccessor;
-import eu.pb4.polymer.resourcepack.api.PolymerModelData;
-import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.block.FacingBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.item.Items;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -30,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.MiscNetworking;
-import qouteall.q_misc_util.dimension.DimensionIdRecord;
+import qouteall.q_misc_util.dimension.DimensionIntId;
 import qouteall.q_misc_util.my_util.DQuaternion;
 import xyz.nucleoid.fantasy.RuntimeWorld;
 
@@ -53,26 +49,23 @@ public class MiniTardisPortals implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		ServerWorldEvents.LOAD.register((server, world) -> {
-			if (world instanceof RuntimeWorld runtimeWorld) {
-				var regKey = runtimeWorld.getRegistryKey();
-				var id = regKey.getValue().hashCode();
-				((DimensionIdRecordAccessor)DimensionIdRecord.serverRecord).getIdMap().forcePut(regKey, id);
-				((DimensionIdRecordAccessor) DimensionIdRecord.serverRecord).getInverseMap().forcePut(id, regKey);
-				var packet = MiscNetworking.createDimSyncPacket();
+		ServerWorldEvents.LOAD.register(MiniTardisPortals::initWorld);
+	}
+
+	public static void initWorld(MinecraftServer server, ServerWorld world) {
+		if (world instanceof RuntimeWorld runtimeWorld) {
+			var regKey = runtimeWorld.getRegistryKey();
+			var id = regKey.getValue().hashCode();
+			if (!DimensionIntId.getServerMap(server).containsDimId(regKey)) {
+				DimensionIntId.getServerMap(server).add(regKey, id);
+				var packet = MiscNetworking.DimIdSyncPacket.createPacket(server);
 				server.getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> serverPlayerEntity.networkHandler.sendPacket(packet));
 			}
-		});
-
-		PolymerResourcePackUtils.addModAssets(MOD_ID);
+		}
 	}
 
 	public static Identifier id(String path) {
-		return new Identifier(MOD_ID, path);
-	}
-
-	private static PolymerModelData getModel(String modelPath) {
-		return PolymerResourcePackUtils.requestModel(Items.BARRIER, id(modelPath));
+		return Identifier.of(MOD_ID, path);
 	}
 
 	public static void toggleDoorFromExterior(Tardis tardis, World sourceWorld, BlockPos exteriorPos, Direction sourceFacing) {
@@ -133,7 +126,7 @@ public class MiniTardisPortals implements ModInitializer {
 		var sourcePos = Vec3d.ofBottomCenter(exteriorPos.up()).offset(exteriorFacing, PORTAL_OFFSET);
 		var targetPos = Vec3d.ofBottomCenter(interiorPos.up()).offset(interiorFacing, PORTAL_OFFSET);
 
-		var exteriorPortal = Portal.entityType.create(exteriorWorld);
+		var exteriorPortal = Portal.ENTITY_TYPE.create(exteriorWorld);
 		assert exteriorPortal != null;
 		((TardisLinkedPortal) exteriorPortal).mini_tardis_portals$linkTardis(tardis, exteriorPos);
 		exteriorPortal.setOriginPos(sourcePos);
@@ -149,7 +142,7 @@ public class MiniTardisPortals implements ModInitializer {
 				new Vec3d(0, -1, 0)
 		));
 
-		var interiorPortal = PortalManipulation.createReversePortal(exteriorPortal, Portal.entityType);
+		var interiorPortal = PortalManipulation.createReversePortal(exteriorPortal, Portal.ENTITY_TYPE);
 		((TardisLinkedPortal) interiorPortal).mini_tardis_portals$linkTardis(tardis, interiorPos);
 
 		exteriorWorld.spawnEntity(exteriorPortal);

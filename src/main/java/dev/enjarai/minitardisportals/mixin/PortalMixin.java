@@ -1,7 +1,7 @@
 package dev.enjarai.minitardisportals.mixin;
 
+import dev.enjarai.minitardis.ModCCAComponents;
 import dev.enjarai.minitardis.block.ModBlocks;
-import dev.enjarai.minitardis.component.ModComponents;
 import dev.enjarai.minitardis.component.Tardis;
 import dev.enjarai.minitardisportals.duck.TardisLinkedPortal;
 import net.minecraft.entity.Entity;
@@ -36,7 +36,7 @@ public abstract class PortalMixin extends Entity implements TardisLinkedPortal {
     private Optional<Tardis> getTardis() {
         var server = getWorld().getServer();
         if (linkedTardis != null && server != null) {
-            var holder = ModComponents.TARDIS_HOLDER.get(server.getSaveProperties());
+            var holder = ModCCAComponents.TARDIS_HOLDER.get(server.getSaveProperties());
             return holder.getTardis(linkedTardis);
         }
         return Optional.empty();
@@ -57,7 +57,7 @@ public abstract class PortalMixin extends Entity implements TardisLinkedPortal {
             linkedTardis = compoundTag.getUuid("mini_tardis_portals:linked_tardis");
         }
         if (compoundTag.contains("mini_tardis_portals:anchor_pos")) {
-            anchorPos = NbtHelper.toBlockPos(compoundTag.getCompound("mini_tardis_portals:anchor_pos"));
+            anchorPos = NbtHelper.toBlockPos(compoundTag, "mini_tardis_portals:anchor_pos").orElse(null);
         }
     }
 

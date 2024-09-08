@@ -2,16 +2,16 @@
 	"schemaVersion": 1,
 	"id": "mini_tardis_portals",
 	"version": "${version}",
-	"name": "Mini Tardis: Portals",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Mini Tardis: BOTI",
+	"description": "An addon for Mini Tardis to add compatibility with Immersive Portals",
 	"authors": [
 		"enjarai"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://enjarai.dev/",
+		"sources": "https://github.com/enjarai/mini-tardis-portals"
 	},
-	"license": "",
+	"license": "ARR",
 	"icon": "assets/mini_tardis_portals/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -25,6 +25,7 @@
 	"depends": {
 		"fabricloader": ">=0.15.0",
 		"fabric-api": "*",
-		"mini_tardis": "*"
+		"mini_tardis": ">=1.0.3",
+		"immersive_portals": ">=6.0.0"
 	}
 }

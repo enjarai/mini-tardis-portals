@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -39,6 +39,14 @@ repositories {
 	maven {
 		url 'https://maven.shedaniel.me'
 	}
+
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 dependencies {
@@ -55,9 +63,7 @@ dependencies {
 //	modImplementation "xyz.nucleoid:fantasy:${project.fantasy_version}"
 //	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
 
-	modImplementation ("com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:${project.imm_ptl_version}")
-	modImplementation ("com.github.iPortalTeam.ImmersivePortalsMod:q_misc_util:${project.imm_ptl_version}")
-	modImplementation ("com.github.iPortalTeam.ImmersivePortalsMod:build:${project.imm_ptl_version}")
+	modImplementation ("com.github.iPortalTeam:ImmersivePortalsMod:${project.imm_ptl_version}")
 }
 
 processResources {
@@ -69,7 +75,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 }
 
 java {
@@ -78,8 +84,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {

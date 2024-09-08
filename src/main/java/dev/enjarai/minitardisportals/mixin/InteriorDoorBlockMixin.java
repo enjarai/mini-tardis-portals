@@ -31,7 +31,7 @@ public abstract class InteriorDoorBlockMixin implements TardisAware {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void openDoorInstead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+    private void openDoorInstead(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if (!world.isClient()) {
             getTardis(world).ifPresent(tardis ->
                     MiniTardisPortals.openDoorFromInterior(tardis, world,

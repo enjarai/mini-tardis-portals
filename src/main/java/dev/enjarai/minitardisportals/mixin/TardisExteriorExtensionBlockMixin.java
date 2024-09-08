@@ -23,10 +23,9 @@ public abstract class TardisExteriorExtensionBlockMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void openDoorInstead(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+    private void openDoorInstead(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         var facing = world.getBlockState(pos.down()).get(TardisExteriorBlock.FACING);
         if (!world.isClient()
-                && hand == Hand.MAIN_HAND
                 && hit.getSide() == facing
                 && world.getBlockEntity(pos.down()) instanceof TardisExteriorBlockEntity blockEntity
                 && blockEntity.getLinkedTardis() != null) {
