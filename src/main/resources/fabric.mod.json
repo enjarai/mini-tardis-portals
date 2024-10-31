@@ -25,7 +25,7 @@
 	"depends": {
 		"fabricloader": ">=0.15.0",
 		"fabric-api": "*",
-		"mini_tardis": ">=1.0.3",
+		"mini_tardis": ">=1.2.0-",
 		"immersive_portals": ">=6.0.0"
 	}
 }

@@ -4,7 +4,10 @@ import dev.enjarai.minitardis.block.InteriorDoorBlock;
 import dev.enjarai.minitardis.block.ModBlocks;
 import dev.enjarai.minitardis.component.Tardis;
 import dev.enjarai.minitardisportals.duck.TardisLinkedPortal;
+import dev.enjarai.minitardisportals.mixin.ClientPlayNetworkHandlerAccessor;
 import dev.enjarai.minitardisportals.mixin.TardisAccessor;
+import dev.enjarai.minitardisportals.net.WorldKeysPacket;
+import io.wispforest.owo.network.OwoNetChannel;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -41,6 +44,8 @@ public class MiniTardisPortals implements ModInitializer {
 	public static final String MOD_ID = "mini_tardis_portals";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	public static final OwoNetChannel CHANNEL = OwoNetChannel.create(MiniTardisPortals.id("channel"));
+
 	public static double PORTAL_OFFSET = 0.5 + 1.0 / 16.0 * 1.1;
 
 	@Override
@@ -50,17 +55,16 @@ public class MiniTardisPortals implements ModInitializer {
 		// Proceed with mild caution.
 
 		ServerWorldEvents.LOAD.register(MiniTardisPortals::initWorld);
+
+		CHANNEL.registerClientbound(WorldKeysPacket.class, WorldKeysPacket.ENDEC, (packet, access) -> {
+			((ClientPlayNetworkHandlerAccessor) access.netHandler()).setWorldKeys(packet.keys());
+		});
 	}
 
 	public static void initWorld(MinecraftServer server, ServerWorld world) {
-		if (world instanceof RuntimeWorld runtimeWorld) {
-			var regKey = runtimeWorld.getRegistryKey();
-			var id = regKey.getValue().hashCode();
-			if (!DimensionIntId.getServerMap(server).containsDimId(regKey)) {
-				DimensionIntId.getServerMap(server).add(regKey, id);
-				var packet = MiscNetworking.DimIdSyncPacket.createPacket(server);
-				server.getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> serverPlayerEntity.networkHandler.sendPacket(packet));
-			}
+		if (world instanceof RuntimeWorld) {
+			DimensionIntId.onServerDimensionChanged(server);
+			CHANNEL.serverHandle(server).send(new WorldKeysPacket(server.getWorldRegistryKeys()));
 		}
 	}
 
